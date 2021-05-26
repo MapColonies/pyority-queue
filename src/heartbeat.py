@@ -18,6 +18,7 @@ class Heartbeat:
             self.thread.start()
         except Exception as e:
             print(f'Error occurred: {e}.')  # TODO: replace by mc-logger
+            raise e
 
     def stop(self):
         try:
@@ -29,6 +30,7 @@ class Heartbeat:
                 print('thread was stopped ')  # TODO: replace by mc-logger
         except Exception as e:
             print(f'Error occurred: {e}.')  # TODO: replace by mc-logger
+            raise e
 
     async def send_heartbeat(self, url, interval_ms):
         try:
@@ -42,6 +44,7 @@ class Heartbeat:
                         await response.json()
         except Exception as e:
             print(f'Error occurred: {e}.')  # TODO: replace by mc-logger
+            raise e
 
     def thread_callback(self, args):
         loop = asyncio.new_event_loop()

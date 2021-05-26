@@ -15,7 +15,6 @@ class TaskHandler:
     async def dequeue(self):
         try:
             resp = await self.record.consume(self.host_base_url, self.job_type, self.task_type)
-            resp['id'] = 1
             task_id = resp['id']
             await self.heartbeat.start(task_id)
         except Exception as e:
