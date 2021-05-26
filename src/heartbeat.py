@@ -15,6 +15,7 @@ class Heartbeat:
         try:
             heartbeat_url = f'{self.base_url}/{task_id}'
             self.thread = threading.Thread(target=self.thread_callback, args=[heartbeat_url])
+            self.thread.getName()
             self.thread.start()
         except Exception as e:
             print(f'Error occurred: {e}.')  # TODO: replace by mc-logger
@@ -24,7 +25,7 @@ class Heartbeat:
         try:
             if self.running is True:
                 self.running = False
-                print('stopping thread')  # TODO: replace by mc-logger
+                print('stopping heartbeat thread')  # TODO: replace by mc-logger
                 # join() will terminate thread when done or rejected
                 self.thread.join()
                 print('thread was stopped ')  # TODO: replace by mc-logger
@@ -36,15 +37,11 @@ class Heartbeat:
         try:
             while self.running is True:
                 await asyncio.sleep(interval_ms)
-                print(f'sending heartbeat to {url}')  # TODO: replace by mc-logger
                 async with aiohttp.ClientSession() as session:
                     async with session.post(url) as response:
-                        print("Status:", response.status)  # TODO: replace by mc-logger
-                        print("Content-type:", response.headers['content-type'])  # TODO: replace by mc-logger
                         await response.json()
         except Exception as e:
             print(f'Error occurred: {e}.')  # TODO: replace by mc-logger
-            raise e
 
     def thread_callback(self, args):
         loop = asyncio.new_event_loop()
