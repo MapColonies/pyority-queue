@@ -15,7 +15,6 @@ class Heartbeat:
         try:
             heartbeat_url = f'{self.base_url}/{task_id}'
             self.thread = threading.Thread(target=self.thread_callback, args=[heartbeat_url])
-            self.thread.getName()
             self.thread.start()
         except Exception as e:
             print(f'Error occurred: {e}.')  # TODO: replace by mc-logger
@@ -36,6 +35,7 @@ class Heartbeat:
     async def send_heartbeat(self, url, interval_ms):
         try:
             while self.running is True:
+                print('sending heartbeat')
                 await asyncio.sleep(interval_ms)
                 async with aiohttp.ClientSession() as session:
                     async with session.post(url) as response:
