@@ -15,7 +15,7 @@ class Heartbeat:
     async def start(self, task_id):
         try:
             heartbeat_url = f'{self.base_url}/{task_id}'
-            self.thread = threading.Thread(target=self.thread_callback, args=[heartbeat_url])
+            self.thread = threading.Thread(name='HearbeatThread', target=self.thread_callback, args=[heartbeat_url])
             self.thread.start()
         except Exception as e:
             self.logger.error(f'Error occurred: {e}.')
@@ -24,11 +24,12 @@ class Heartbeat:
     def stop(self):
         try:
             if self.running is True:
+                thread_name = self.thread.getName()
                 self.running = False
-                self.logger.info(f'stopping heartbeat thread')
+                self.logger.info(f'stopping {thread_name} thread')
                 # join() will terminate thread when done or rejected
                 self.thread.join()
-                self.logger.info(f'heartbeat thread stopped')
+                self.logger.info(f'{thread_name} thread stopped')
         except Exception as e:
             self.logger.error(f'Error occurred: {e}.')
             raise e

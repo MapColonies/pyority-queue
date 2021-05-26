@@ -12,7 +12,8 @@ class Logger:
         if not os.path.exists(cls.log_dir):
             os.makedirs(cls.log_dir)
         return generate_logger(f'mc-pyority-queue-', log_level=cls.log_level,
-                               handlers=[{'type': 'stream', 'output': 'stderr'}, {'type': 'rotating_file', 'path': f'{cls.log_dir}/pyority-queue.log'}])
+                               handlers=[{'type': 'stream', 'output': 'stderr'},
+                                         {'type': 'rotating_file', 'path': f'{cls.log_dir}/pyority-queue.log'}])
 
     @classmethod
     def get_logger_instance(cls):
