@@ -25,6 +25,26 @@ From PyPi
 
 <br />
 
+*Import & Initialize*
+
+
+
+```
+from mc-pyority-queue.task_handler import TaskHandler
+
+task_handler = TaskHandler('job_type', 'task_type',
+    'http://localhost:8081', 'http://localhost:8080/heartbeat', 1.0)
+```
+above example uses TaskHanler class and initializing it follow the request params:
+
+`task_handler = TaskHandler(job_type, task_type, host_base_url, heartbeat_url, interval_ms)`
+
+
+
+
+
+<br />
+
 * **Dequeue** 
 
 ```
