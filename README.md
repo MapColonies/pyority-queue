@@ -37,7 +37,7 @@ task_handler = TaskHandler('job_type', 'task_type',
 ```
 above example uses TaskHanler class and initializing it follow the request params:
 
-`task_handler = TaskHandler(job_type, task_type, host_base_url, heartbeat_url, interval_ms)`
+`task_handler = TaskHandler(job_type, task_type, job_mngr_url, heartbeat_url, interval_ms)`
 
 
 
@@ -68,7 +68,7 @@ consume task from the job manager service and start send heartbeat to the heartb
 * **Reject**
 
 ```
- await task_hanlder.reject()
+ await task_hanlder.reject(job_id, task_id, recoverable(boolean))
 ```
 reject handle error by stop sending task's heartbeat and handle task's status - depends if task is recoverable or not.
 
@@ -77,7 +77,7 @@ reject handle error by stop sending task's heartbeat and handle task's status - 
 * **ack**
 
 ```
-await task_hanlder.reject()
+await task_hanlder.ack(job_id, task_id)
 ```
 ack handle completed task - stops sending task's heartbeat and handle complete task status
 
@@ -86,6 +86,6 @@ ack handle completed task - stops sending task's heartbeat and handle complete t
 * **update_progress**
 
 ```
-await task_hanlder.update_progress()
+await task_hanlder.update_progress(job_id, task_id, percentage)
 ```
 handle task progress - sends job manager updated percentage on progress 
