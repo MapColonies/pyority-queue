@@ -1,6 +1,7 @@
 from heartbeat import *
 from records import *
 from enums.statuses import Statuses
+from logger.json_logger import Logger
 
 
 class TaskHandler:
@@ -10,6 +11,7 @@ class TaskHandler:
         self.heartbeat_url = heartbeat_url
         self.record = Records(self.job_type, self.task_type, job_manager_base_url)
         self.heartbeat = Heartbeat(self.heartbeat_url, interval_ms)
+        self.logger = Logger.get_logger_instance()
 
     async def dequeue(self):
         try:
@@ -18,7 +20,7 @@ class TaskHandler:
                 task_id = resp.get('id')
                 await self.heartbeat.start(task_id)
         except Exception as e:
-            print(f'Error occurred: {e}.')  # TODO: replace by mc-logger
+            self.logger.error(f'Error occurred: {e}.')
             raise e
 
     async def reject(self, job_id, task_id, recoverable):
@@ -30,7 +32,7 @@ class TaskHandler:
                     attempts = task.get('attempts')
                     payload = {
                       'status': Statuses.PENDING.value,
-                      'attempts': attempts+1  # TODO: replace with increment value ***
+                      'attempts': attempts+1
                     }
                 await self.record.update(job_id, task_id, payload)
             else:
@@ -39,7 +41,7 @@ class TaskHandler:
                 }
                 await self.record.update(job_id, task_id, payload)
         except Exception as e:
-            print(f'Error occurred: {e}.')  # TODO: replace by mc-logger
+            self.logger.error(f'Error occurred: {e}.')
             raise e
 
     async def ack(self, job_id, task_id):
@@ -50,7 +52,7 @@ class TaskHandler:
             }
             await self.record.update(job_id, task_id, payload)
         except Exception as e:
-            print(f'Error occurred: {e}.')  # TODO: replace by mc-logger
+            self.logger.error(f'Error occurred: {e}.')
             raise e
 
     async def update_progress(self, job_id, task_id, percentage):
@@ -60,5 +62,5 @@ class TaskHandler:
             }
             await self.record.update(job_id, task_id, payload)
         except Exception as e:
-            print(f'Error occurred: {e}.')  # TODO: replace by mc-logger
+            self.logger.error(f'Error occurred: {e}.')
             raise e

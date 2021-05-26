@@ -14,19 +14,19 @@ class Records:
         try:
             get_task_url = f'{self.base_url}/job/{job_id}/tasks/{task_id}'
             async with aiohttp.ClientSession() as session:
-                print(f'GET Request')  # TODO: replace by mc-logger
+                self.logger.info(f'GET Request to: {get_task_url}.')
                 async with session.get(get_task_url) as response:
                     resp = await response.json()
                     return resp
         except Exception as e:
-            print(f'Error occurred: {e}.')  # TODO: replace by mc-logger
+            self.logger.error(f'Error occurred: {e}.')
             raise e
 
     async def consume(self, job_type, task_type):
         try:
             dequeue_url = f'{self.base_url}/tasks/{job_type}/{task_type}/startPending'
             async with aiohttp.ClientSession() as session:
-                print(f'POST Request')  # TODO: replace by mc-logger
+                self.logger.info(f'consuming record.')
                 headers = {'accept': 'application/json', 'Content-Type': 'application/json'}
                 async with session.get(dequeue_url, headers=headers) as response:
                     if response.status == StatusCodes.NOT_FOUND.value:
@@ -36,21 +36,21 @@ class Records:
                     else:
                         raise Exception(response)
         except EmptyQueueError:
-            print('Error without interrupt')  # TODO: replace by mc-logger and log better message
+            self.logger.error(f'consuming an record failed due to empty queue')
             pass
         except Exception as e:
-            print(f'Error occurred: {e}.')  # TODO: replace by mc-logger
+            self.logger.error(f'Error occurred: {e}.')
             raise e
 
     async def update(self, job_id, task_id, payload):
         try:
             update_url = f'{self.base_url}/job/{job_id}/tasks/{task_id}'
             async with aiohttp.ClientSession() as session:
-                print(f'Update request to {update_url}')  # TODO: replace by mc-logger
+                self.logger.info(f'Update task: "{task_id}" request to {update_url}')
                 headers = {'accept': 'application/json', 'Content-Type': 'application/json'}
                 async with session.put(update_url, json=payload, headers=headers) as response:
                     resp = await response.json()
                     return resp
         except Exception as e:
-            print(f'Error occurred: {e}.')  # TODO: replace by mc-logger
+            self.logger.error(f'Error occurred: {e}.')
             raise e
