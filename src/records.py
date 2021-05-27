@@ -2,15 +2,14 @@ import aiohttp
 from heartbeat import *
 from enums.status_codes import *
 from errors.empty_queue_error import *
-from logger.json_logger import Logger
 
 
 class Records:
-    def __init__(self, job_type, task_type, base_url):
+    def __init__(self, job_type, task_type, base_url, logger):
         self.job_type = job_type
         self.task_type = task_type
         self.base_url = base_url
-        self.logger = Logger.get_logger_instance()
+        self.logger = logger
 
     async def get_task(self, job_id, task_id):
         try:

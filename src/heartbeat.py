@@ -1,16 +1,15 @@
 import aiohttp
 import threading
 import asyncio
-from logger.json_logger import Logger
 
 
 class Heartbeat:
-    def __init__(self, base_url, interval_ms):
+    def __init__(self, base_url, interval_ms, logger):
         self.base_url = base_url
         self.running = True
         self.thread = None
         self.interval_ms = interval_ms
-        self.logger = Logger.get_logger_instance()
+        self.logger = logger
 
     async def start(self, task_id):
         try:
