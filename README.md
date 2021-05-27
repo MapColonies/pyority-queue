@@ -37,7 +37,7 @@ task_handler = TaskHandler('job_type', 'task_type',
 ```
 above example uses TaskHanler class and initializing it follow the request params:
 
-`task_handler = TaskHandler(job_type, task_type, job_mngr_url, heartbeat_url, interval_ms)`
+`task_handler = TaskHandler(job_type, task_type, job_mngr_url, heartbeat_url, interval_ms, logger)`
 
 
 
@@ -52,7 +52,7 @@ from mc-pyority-queue.task_handler import TaskHandler
 
 async def main():
     task_handler = TaskHandler('job_type', 'task_type',
-    'http://localhost:8081', 'http://localhost:8080/heartbeat', 1.0)
+    'http://localhost:8081', 'http://localhost:8080/heartbeat', 1.0, logger_instance)
 
     await task_hanlder.dequeue()
 
@@ -68,7 +68,7 @@ consume task from the job manager service and start send heartbeat to the heartb
 * **Reject**
 
 ```
- await task_hanlder.reject(job_id, task_id, recoverable(boolean))
+ await task_hanlder.reject(job_id, task_id, is_recoverable, reason)
 ```
 reject handle error by stop sending task's heartbeat and handle task's status - depends if task is recoverable or not.
 

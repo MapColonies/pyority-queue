@@ -23,10 +23,10 @@ class TaskHandler:
             self.logger.error(f'Error occurred: {e}.')
             raise e
 
-    async def reject(self, job_id, task_id, recoverable, reason):
+    async def reject(self, job_id, task_id, is_recoverable, reason):
         try:
             self.heartbeat.stop()
-            if recoverable is True:
+            if is_recoverable is True:
                 task = await self.record.get_task(job_id, task_id)
                 if task:
                     attempts = task.get('attempts')
