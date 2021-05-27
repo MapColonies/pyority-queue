@@ -1,26 +1,29 @@
 from heartbeat import *
 from records import *
 from enums.statuses import Statuses
+import asyncio
 
 
 class TaskHandler:
-    def __init__(self, job_type, task_type, job_manager_base_url, heartbeat_url, interval_ms, logger):
+    def __init__(self, job_type, task_type, job_manager_base_url, heartbeat_url, heartbeat_interval_ms, logger):
         self.logger = logger
         self.job_type = job_type
         self.task_type = task_type
         self.heartbeat_url = heartbeat_url
         self.record = Records(self.job_type, self.task_type, job_manager_base_url, self.logger)
-        self.heartbeat = Heartbeat(self.heartbeat_url, interval_ms, self.logger)
+        self.heartbeat = Heartbeat(self.heartbeat_url, heartbeat_interval_ms, self.logger)
 
-
-    async def dequeue(self):
+    async def dequeue(self, interval_ms):
         try:
-            resp = await self.record.consume(self.job_type, self.task_type)
-            if resp:
-                task_id = resp.get('id')
-                await self.heartbeat.start(task_id)
+            while True:
+                resp = await self.record.consume(self.job_type, self.task_type)
+                if resp:
+                    task_id = resp.get('id')
+                    await self.heartbeat.start(task_id)
+                    break
+                await asyncio.sleep(interval_ms)
         except Exception as e:
-            self.logger.error(f'Error occurred: {e}.')
+            self.logger.error(f'Error occurred while trying dequeue a record: {e}.')
             raise e
 
     async def reject(self, job_id, task_id, is_recoverable, reason):
@@ -42,7 +45,7 @@ class TaskHandler:
                 }
                 await self.record.update(job_id, task_id, payload)
         except Exception as e:
-            self.logger.error(f'Error occurred: {e}.')
+            self.logger.error(f'Error occurred while trying update rejected record: {e}.')
             raise e
 
     async def ack(self, job_id, task_id):
@@ -53,7 +56,7 @@ class TaskHandler:
             }
             await self.record.update(job_id, task_id, payload)
         except Exception as e:
-            self.logger.error(f'Error occurred: {e}.')
+            self.logger.error(f'Error occurred while trying update ack: {e}.')
             raise e
 
     async def update_progress(self, job_id, task_id, percentage):
@@ -63,5 +66,5 @@ class TaskHandler:
             }
             await self.record.update(job_id, task_id, payload)
         except Exception as e:
-            self.logger.error(f'Error occurred: {e}.')
+            self.logger.error(f'Error occurred while trying update progress: {e}.')
             raise e

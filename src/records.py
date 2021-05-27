@@ -29,7 +29,7 @@ class Records:
             async with aiohttp.ClientSession() as session:
                 self.logger.info(f'consuming record.')
                 headers = {'accept': 'application/json', 'Content-Type': 'application/json'}
-                async with session.get(dequeue_url, headers=headers) as response:
+                async with session.post(dequeue_url, headers=headers) as response:
                     if response.status == StatusCodes.NOT_FOUND.value:
                         raise EmptyQueueError()
                     elif response.status == StatusCodes.OK.value:

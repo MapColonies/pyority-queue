@@ -54,7 +54,7 @@ async def main():
     task_handler = TaskHandler('job_type', 'task_type',
     'http://localhost:8081', 'http://localhost:8080/heartbeat', 1.0, logger_instance)
 
-    await task_hanlder.dequeue()
+    await task_hanlder.dequeue(interval_ms)
 
 
 loop = asyncio.get_event_loop()
