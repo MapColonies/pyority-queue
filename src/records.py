@@ -30,6 +30,7 @@ class Records:
                 self.logger.info(f'consuming record.')
                 headers = {'accept': 'application/json', 'Content-Type': 'application/json'}
                 async with session.post(dequeue_url, headers=headers) as response:
+                    response.status = 200
                     if response.status == StatusCodes.NOT_FOUND.value:
                         raise EmptyQueueError()
                     elif response.status == StatusCodes.OK.value:

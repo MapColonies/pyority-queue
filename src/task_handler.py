@@ -20,7 +20,7 @@ class TaskHandler:
                 if resp:
                     task_id = resp.get('id')
                     await self.heartbeat.start(task_id)
-                    break
+                    return resp
                 await asyncio.sleep(interval_ms)
         except Exception as e:
             self.logger.error(f'Error occurred while trying dequeue a record: {e}.')
