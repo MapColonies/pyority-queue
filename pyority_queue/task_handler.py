@@ -1,6 +1,6 @@
-from heartbeat import *
-from records import *
-from enums.statuses import Statuses
+from pyority_queue.heartbeat import *
+from pyority_queue.records import *
+from pyority_queue.enums.statuses import Statuses
 import asyncio
 
 

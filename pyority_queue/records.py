@@ -1,7 +1,7 @@
 import aiohttp
-from heartbeat import *
-from enums.status_codes import *
-from errors.empty_queue_error import *
+from pyority_queue.heartbeat import *
+from pyority_queue.enums.status_codes import *
+from pyority_queue.errors.empty_queue_error import *
 
 
 class Records:
@@ -30,7 +30,6 @@ class Records:
                 self.logger.info(f'consuming record.')
                 headers = {'accept': 'application/json', 'Content-Type': 'application/json'}
                 async with session.post(dequeue_url, headers=headers) as response:
-                    response.status = 200
                     if response.status == StatusCodes.NOT_FOUND.value:
                         raise EmptyQueueError()
                     elif response.status == StatusCodes.OK.value:

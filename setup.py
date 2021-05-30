@@ -7,7 +7,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="mc-pyority-queue",
+    name="mc-pyority_queue",
     author="MC",
     description="Map colonies priority queue management service for records",
     long_description=long_description,
