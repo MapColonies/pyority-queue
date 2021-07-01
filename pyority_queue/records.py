@@ -13,7 +13,7 @@ class Records:
 
     async def get_task(self, job_id, task_id):
         try:
-            get_task_url = f'{self.base_url}/job/{job_id}/tasks/{task_id}'
+            get_task_url = f'{self.base_url}/jobs/{job_id}/tasks/{task_id}'
             async with aiohttp.ClientSession() as session:
                 self.logger.info(f'GET Request to: {get_task_url}.')
                 async with session.get(get_task_url) as response:
@@ -45,7 +45,7 @@ class Records:
 
     async def update(self, job_id, task_id, payload):
         try:
-            update_url = f'{self.base_url}/job/{job_id}/tasks/{task_id}'
+            update_url = f'{self.base_url}/jobs/{job_id}/tasks/{task_id}'
             async with aiohttp.ClientSession() as session:
                 self.logger.info(f'Update task: "{task_id}" request to {update_url}')
                 headers = {'accept': 'application/json', 'Content-Type': 'application/json'}
