@@ -63,6 +63,7 @@ class TaskHandler:
         try:
             payload = {
                 'percentage': percentage,
+                'status': Statuses.IN_PROGRESS
             }
             await self.record.update(job_id, task_id, payload)
         except Exception as e:
