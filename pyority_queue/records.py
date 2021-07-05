@@ -50,8 +50,7 @@ class Records:
                 self.logger.info(f'Update task: "{task_id}" request to {update_url}')
                 headers = {'accept': 'application/json', 'Content-Type': 'application/json'}
                 async with session.put(update_url, json=payload, headers=headers) as response:
-                    resp = await response.json()
-                    return resp
+                    await response.text()
         except Exception as e:
             self.logger.error(f'Error occurred: {e}.')
             raise e

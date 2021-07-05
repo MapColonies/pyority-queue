@@ -26,7 +26,7 @@ class TaskHandler:
             self.logger.error(f'Error occurred while trying dequeue a record: {e}.')
             raise e
 
-    async def reject(self, job_id, task_id, is_recoverable, reason):
+    async def reject(self, job_id, task_id, is_recoverable, reason=None):
         try:
             self.heartbeat.stop()
             if is_recoverable is True:
@@ -41,7 +41,8 @@ class TaskHandler:
                 await self.record.update(job_id, task_id, payload)
             else:
                 payload = {
-                    "status": Statuses.FAILED.value
+                    "status": Statuses.FAILED.value,
+                    "reason": reason
                 }
                 await self.record.update(job_id, task_id, payload)
         except Exception as e:
