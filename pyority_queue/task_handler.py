@@ -17,8 +17,14 @@ class TaskHandler:
         try:
             while True:
                 resp = await self.record.consume(self.job_type, self.task_type)
+                
                 if resp:
+                    job_id = resp.get('jobId')
                     task_id = resp.get('id')
+                    payload = {
+                        'status': Statuses.IN_PROGRESS.value
+                    }
+                    await self.self.record.update(job_id, task_id, payload)  
                     await self.heartbeat.start(task_id)
                     return resp
                 await asyncio.sleep(interval_ms)
@@ -41,8 +47,7 @@ class TaskHandler:
                 await self.record.update(job_id, task_id, payload)
             else:
                 payload = {
-                    "status": Statuses.FAILED.value,
-                    "reason": reason
+                    "status": Statuses.FAILED.value
                 }
                 await self.record.update(job_id, task_id, payload)
         except Exception as e:
@@ -64,7 +69,7 @@ class TaskHandler:
         try:
             payload = {
                 'percentage': percentage,
-                'status': Statuses.IN_PROGRESS
+                'status': Statuses.IN_PROGRESS.value
             }
             await self.record.update(job_id, task_id, payload)
         except Exception as e:
