@@ -24,7 +24,7 @@ class TaskHandler:
                     payload = {
                         'status': Statuses.IN_PROGRESS.value
                     }
-                    await self.self.record.update(job_id, task_id, payload)  
+                    await self.record.update(job_id, task_id, payload)
                     await self.heartbeat.start(task_id)
                     return resp
                 await asyncio.sleep(interval_ms)
