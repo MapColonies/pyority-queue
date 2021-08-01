@@ -44,7 +44,7 @@ class TaskHandler:
                       'attempts': attempts+1,
                       'reason': reason
                     }
-                await self.record.update(job_id, task_id, payload)
+                    await self.record.update(job_id, task_id, payload)
             else:
                 payload = {
                     "status": Statuses.FAILED.value
