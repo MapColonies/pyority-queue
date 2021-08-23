@@ -37,7 +37,7 @@ class Records:
                     else:
                         raise Exception(response)
         except EmptyQueueError:
-            self.logger.error(f'consuming an record failed due to empty queue')
+            self.logger.debug(f'consuming an record failed due to empty queue')
             pass
         except Exception as e:
             self.logger.error(f'Error occurred: {e}.')
